@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de financement photovoltaïque — Réunion Renouvelables</title>
+<style>
+:root {
+  --bleu:       #1565C0;
+  --bleu-dark:  #0D3B7A;
+  --bleu-light: #4A90D9;
+  --bleu-pale:  #E3EEF9;
+  --bleu-bg:    #F0F6FC;
+  --orange:     #F5A623;
+  --orange-dk:  #D4891A;
+  --orange-pale:#FFF8EC;
+  --green:      #1B8A4C;
+  --green-pale: #E6F7EE;
+  --border:     #C5D8F0;
+  --text:       #1A1A2E;
+  --text-mid:   #555;
+  --text-light: #888;
+  --white:      #fff;
+  --input-bg:   rgba(0,0,0,0.05);
+  --input-border:rgba(0,0,0,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI', Arial, sans-serif; background:#EDF2F7; color:var(--text); font-size:14px; }
+.page { max-width:100%; margin:0; background:var(--white); min-height:100vh; overflow:hidden; }
+
+.page-header { padding:18px 32px 16px; border-bottom:2px solid var(--border); display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px; }
+.logo-wrap img { height:52px; }
+.logo-fallback { font-weight:900; font-size:15px; color:var(--bleu-dark); line-height:1.2; display:none; }
+.header-center { text-align:center; }
+.header-center h1 { font-weight:900; font-size:20px; color:var(--bleu-dark); letter-spacing:-.3px; }
+.header-center p { font-size:12px; color:var(--text-light); margin-top:2px; }
+.header-center .badge { display:inline-block; background:var(--bleu-pale); color:var(--bleu-dark); border:1px solid var(--border); border-radius:20px; padding:3px 12px; font-size:11px; font-weight:600; margin-top:5px; }
+.sofider-box { background:var(--bleu-dark); color:#fff; border-radius:6px; padding:8px 14px; text-align:center; min-width:100px; }
+.sofider-box .s-name { font-weight:900; font-size:17px; letter-spacing:.5px; }
+.sofider-box .s-sub { font-size:10px; opacity:.7; margin:1px 0; }
+.sofider-box .s-groupe { background:var(--bleu); font-size:10px; font-weight:700; border-radius:3px; padding:2px 6px; margin-top:3px; display:inline-block; }
+
+.client-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; padding:16px 32px; border-bottom:1px solid var(--border); background:var(--bleu-bg); }
+.client-field label { font-size:11px; color:var(--text-light); font-weight:500; text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:4px; }
+.client-field input { width:100%; background:var(--input-bg); color:var(--text); border:1.5px solid var(--input-border); border-radius:6px; padding:10px 13px; font-weight:700; font-size:14px; outline:none; transition:border-color .2s; }
+.client-field input:focus { border-color:var(--bleu); background:#fff; }
+
+.offres-grid { display:grid; grid-template-columns:1fr 1fr; }
+.offre { padding:22px 26px; border-right:2px solid var(--border); }
+.offre:last-child { border-right:none; }
+.offre-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.offre-title { font-weight:900; font-size:15px; color:var(--text); }
+.offre-badge { color:#fff; font-weight:800; font-size:12px; border-radius:20px; padding:3px 12px; }
+.offre-badge.bleu  { background:var(--bleu); }
+.offre-badge.green { background:var(--green); }
+
+.fields-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.f-field label { font-size:10px; color:var(--text-light); font-weight:500; text-transform:uppercase; letter-spacing:.4px; display:block; margin-bottom:3px; }
+.f-field input, .kit-select { width:100%; background:var(--input-bg); color:var(--text); border:1.5px solid var(--input-border); border-radius:5px; padding:8px 10px; font-size:14px; font-weight:500; outline:none; transition:border-color .2s, background .2s; -moz-appearance:textfield; text-align:center; }
+.f-field input::-webkit-inner-spin-button { -webkit-appearance:none; }
+.f-field input:focus, .kit-select:focus { border-color:var(--bleu); background:#fff; }
+.f-field.full { grid-column:1/-1; }
+.kit-select-wrap { margin-bottom:10px; }
+.kit-select-wrap label { font-size:10px; color:var(--text-light); font-weight:500; text-transform:uppercase; letter-spacing:.4px; display:block; margin-bottom:3px; }
+
+.fin-resume { display:grid; grid-template-columns:1fr 1fr 1fr; margin:16px 0 14px; border-radius:10px; overflow:hidden; box-shadow:0 2px 12px rgba(13,59,122,.13); }
+.fin-cell { padding:14px 10px; text-align:center; }
+.fin-cell:nth-child(1) { background:var(--bleu-dark); color:#fff; }
+.fin-cell:nth-child(2) { background:var(--orange); color:#fff; }
+.fin-cell:nth-child(3) { background:var(--bleu); color:#fff; }
+.fin-cell-label { font-size:10px; opacity:.8; text-transform:uppercase; letter-spacing:.5px; font-weight:600; }
+.fin-cell-val { font-weight:900; font-size:20px; margin-top:4px; line-height:1; }
+.fin-cell-sub { font-size:10px; opacity:.7; margin-top:2px; }
+.fin-resume-2col { grid-template-columns:1fr 1fr !important; }
+
+.section-sep { font-size:10px; color:var(--text-light); text-transform:uppercase; letter-spacing:.6px; font-weight:700; margin:10px 0 8px; padding-bottom:5px; border-bottom:1.5px solid var(--border); }
+
+.amort-table { width:100%; border-collapse:collapse; font-size:12px; }
+.amort-table thead tr { border-bottom:2px solid var(--border); }
+.amort-table th { font-size:10px; color:var(--text-light); text-transform:uppercase; letter-spacing:.3px; font-weight:700; padding:5px 4px; text-align:right; }
+.amort-table th:first-child { text-align:left; }
+.amort-table td { padding:6px 4px; text-align:right; border-bottom:1px solid #EEF3FA; color:var(--text-mid); }
+.amort-table td:first-child { text-align:left; font-weight:600; color:var(--text); }
+.amort-table tr.done { background:var(--green-pale); }
+.amort-table tr.done td { color:var(--green); font-weight:700; }
+.tag-rembourse { background:var(--green); color:#fff; font-size:10px; font-weight:800; border-radius:10px; padding:2px 8px; white-space:nowrap; }
+
+.conclusion { background:var(--green-pale); border:1.5px solid #7FCCA1; border-radius:8px; padding:11px 14px; margin-top:10px; }
+.conclusion-title { font-weight:900; font-size:15px; color:var(--green); }
+.conclusion-sub { font-size:12px; color:var(--text-mid); margin-top:3px; }
+.totaux-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+.totaux-grid-1col { display:grid; grid-template-columns:1fr; gap:8px; margin-top:8px; }
+.totaux-cell { border-radius:6px; padding:8px 10px; text-align:center; }
+.totaux-cell.green  { background:#fff; border:1.5px solid #7FCCA1; }
+.totaux-cell.orange { background:#fff; border:1.5px solid var(--orange); }
+.totaux-cell-label { font-size:10px; color:var(--text-light); font-weight:600; text-transform:uppercase; letter-spacing:.4px; }
+.totaux-cell-val { font-weight:900; font-size:17px; margin-top:3px; }
+.totaux-cell.green .totaux-cell-val  { color:var(--green); }
+.totaux-cell.orange .totaux-cell-val { color:var(--orange-dk); }
+
+.sep-label { font-size:11px; text-transform:uppercase; letter-spacing:.5px; font-weight:700; color:var(--text-light); margin-bottom:6px; margin-top:8px; padding-top:8px; border-top:1px dashed #7FCCA1; }
+
+.actions { display:flex; flex-direction:column; align-items:center; gap:8px; padding:18px 32px; border-top:2px solid var(--border); background:var(--bleu-bg); }
+.btn-print { padding:11px 26px; border:1.5px solid var(--border); border-radius:6px; font-weight:800; font-size:14px; cursor:pointer; background:var(--white); color:var(--bleu-dark); transition:all .2s; }
+.btn-print:hover { background:var(--bleu-pale); }
+.print-hint { font-size:12px; color:var(--text-light); text-align:center; }
+
+@media print {
+  body { background:#fff; }
+  .actions { display:none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">
+    <div class="logo-wrap">
+      <div style="font-family:'Segoe UI',Arial,sans-serif; font-weight:900; font-size:18px; color:var(--bleu-dark); line-height:1.2;">
+        Réunion<br>Renouvelables
+      </div>
+    </div>
+    <div class="header-center">
+      <h1>Plan de financement photovoltaïque</h1>
+      <p>Financement amélioration de l'habitat</p>
+      <span class="badge">Prêt amélioration habitat — La Réunion</span>
+    </div>
+    <div class="sofider-box">
+      <div class="s-name">SOFIDER</div>
+      <div class="s-sub">Océan Indien</div>
+      <div class="s-groupe">GROUPE BRED</div>
+    </div>
+  </div>
+
+  <div class="client-row">
+    <div class="client-field">
+      <label>Nom du client</label>
+      <input type="text" id="client-nom" placeholder="Nom du client">
+    </div>
+    <div class="client-field">
+      <label>Date</label>
+      <input type="text" id="client-date">
+    </div>
+  </div>
+
+  <div class="offres-grid">
+
+    <div class="offre">
+      <div class="offre-header">
+        <span class="offre-title">OFFRE 1</span>
+        <span class="offre-badge bleu" id="badge1">— kWc</span>
+      </div>
+      <div class="kit-select-wrap">
+        <label>Puissance</label>
+        <select class="kit-select" id="kit1">
+          <option value="">— Choisir —</option>
+          <optgroup label="Sans batterie">
+            <option value="2.02">2,02 kWc — Sans batterie</option>
+            <option value="3">3 kWc — Sans batterie</option>
+            <option value="4">4 kWc — Sans batterie</option>
+            <option value="5">5 kWc — Sans batterie</option>
+            <option value="6">6 kWc — Sans batterie</option>
+            <option value="7">7 kWc — Sans batterie</option>
+            <option value="8">8 kWc — Sans batterie</option>
+            <option value="9">9 kWc — Sans batterie</option>
+          </optgroup>
+          <optgroup label="Avec batterie">
+            <option value="2.02b">2,02 kWc — Avec batterie</option>
+            <option value="3b">3 kWc — Avec batterie</option>
+            <option value="4b">4 kWc — Avec batterie</option>
+            <option value="5b">5 kWc — Avec batterie</option>
+            <option value="6b">6 kWc — Avec batterie</option>
+            <option value="7b">7 kWc — Avec batterie</option>
+            <option value="8b">8 kWc — Avec batterie</option>
+            <option value="9b">9 kWc — Avec batterie</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fields-grid">
+        <div class="f-field"><label>Prix kit TTC (€)</label><input type="number" id="prix1" placeholder="0"></div>
+        <div class="f-field"><label>Subvention Région (€)</label><input type="number" id="subv1" placeholder="0"></div>
+        <div class="f-field"><label>Remise DUO (€)</label><input type="number" id="remise1" placeholder="0"></div>
+        <div class="f-field"><label>Prime EDF (€)</label><input type="number" id="primeedf1" placeholder="0"></div>
+        <div class="f-field"><label>Revente EDF (€/an)</label><input type="number" id="surplus1" placeholder="0"></div>
+        <div class="f-field"><label>Mensualité crédit (€/mois)</label><input type="number" id="mens1" placeholder="0"></div>
+        <div class="f-field"><label>Facture EDF actuelle (€/mois)</label><input type="number" id="edf1" placeholder="0"></div>
+        <div class="f-field full"><label>Durée crédit (mois)</label><input type="number" id="duree1" placeholder="0"></div>
+      </div>
+      <div class="fin-resume" id="finresume1">
+        <div class="fin-cell"><div class="fin-cell-label">Reste à financer</div><div class="fin-cell-val" id="r1-capital">—</div></div>
+        <div class="fin-cell" id="r1-apres-cell" style="display:none"><div class="fin-cell-label">Après prime EDF</div><div class="fin-cell-val" id="r1-apres">—</div><div class="fin-cell-sub">reversée à N+1</div></div>
+        <div class="fin-cell"><div class="fin-cell-label">Mensualité</div><div class="fin-cell-val" id="r1-mens">—</div><div class="fin-cell-sub">€/mois</div></div>
+      </div>
+      <div class="section-sep">📅 Tableau d'amortissement</div>
+      <table class="amort-table">
+        <thead><tr><th>ANNÉE</th><th>MENSUALITÉS</th><th>PRIME EDF</th><th>REVENTE EDF</th><th>CAPITAL DÛ</th></tr></thead>
+        <tbody id="tbody1"></tbody>
+      </table>
+      <div id="conclu1"></div>
+    </div>
+
+    <div class="offre">
+      <div class="offre-header">
+        <span class="offre-title">OFFRE 2</span>
+        <span class="offre-badge green" id="badge2">— kWc</span>
+      </div>
+      <div class="kit-select-wrap">
+        <label>Puissance</label>
+        <select class="kit-select" id="kit2">
+          <option value="">— Choisir —</option>
+          <optgroup label="Sans batterie">
+            <option value="2.02">2,02 kWc — Sans batterie</option>
+            <option value="3">3 kWc — Sans batterie</option>
+            <option value="4">4 kWc — Sans batterie</option>
+            <option value="5">5 kWc — Sans batterie</option>
+            <option value="6">6 kWc — Sans batterie</option>
+            <option value="7">7 kWc — Sans batterie</option>
+            <option value="8">8 kWc — Sans batterie</option>
+            <option value="9">9 kWc — Sans batterie</option>
+          </optgroup>
+          <optgroup label="Avec batterie">
+            <option value="2.02b">2,02 kWc — Avec batterie</option>
+            <option value="3b">3 kWc — Avec batterie</option>
+            <option value="4b">4 kWc — Avec batterie</option>
+            <option value="5b">5 kWc — Avec batterie</option>
+            <option value="6b">6 kWc — Avec batterie</option>
+            <option value="7b">7 kWc — Avec batterie</option>
+            <option value="8b">8 kWc — Avec batterie</option>
+            <option value="9b">9 kWc — Avec batterie</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fields-grid">
+        <div class="f-field"><label>Prix kit TTC (€)</label><input type="number" id="prix2" placeholder="0"></div>
+        <div class="f-field"><label>Subvention Région (€)</label><input type="number" id="subv2" placeholder="0"></div>
+        <div class="f-field"><label>Remise DUO (€)</label><input type="number" id="remise2" placeholder="0"></div>
+        <div class="f-field"><label>Prime EDF (€)</label><input type="number" id="primeedf2" placeholder="0"></div>
+        <div class="f-field"><label>Revente EDF (€/an)</label><input type="number" id="surplus2" placeholder="0"></div>
+        <div class="f-field"><label>Mensualité crédit (€/mois)</label><input type="number" id="mens2" placeholder="0"></div>
+        <div class="f-field"><label>Facture EDF actuelle (€/mois)</label><input type="number" id="edf2" placeholder="0"></div>
+        <div class="f-field full"><label>Durée crédit (mois)</label><input type="number" id="duree2" placeholder="0"></div>
+      </div>
+      <div class="fin-resume" id="finresume2">
+        <div class="fin-cell"><div class="fin-cell-label">Reste à financer</div><div class="fin-cell-val" id="r2-capital">—</div></div>
+        <div class="fin-cell" id="r2-apres-cell" style="display:none"><div class="fin-cell-label">Après prime EDF</div><div class="fin-cell-val" id="r2-apres">—</div><div class="fin-cell-sub">reversée à N+1</div></div>
+        <div class="fin-cell"><div class="fin-cell-label">Mensualité</div><div class="fin-cell-val" id="r2-mens">—</div><div class="fin-cell-sub">€/mois</div></div>
+      </div>
+      <div class="section-sep">📅 Tableau d'amortissement</div>
+      <table class="amort-table">
+        <thead><tr><th>ANNÉE</th><th>MENSUALITÉS</th><th>PRIME EDF</th><th>REVENTE EDF</th><th>CAPITAL DÛ</th></tr></thead>
+        <tbody id="tbody2"></tbody>
+      </table>
+      <div id="conclu2"></div>
+    </div>
+
+  </div>
+
+  <div class="actions">
+    <button class="btn-print" id="btn-print">📄 Enregistrer en PDF</button>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  function fmtN(n) { return new Intl.NumberFormat('fr-FR').format(Math.round(n)); }
+  function fmt(n)  { return fmtN(n) + ' \u20ac'; }
+
+  function getVal(id) {
+    var el = document.getElementById(id);
+    return el ? (parseFloat(el.value) || 0) : 0;
+  }
+
+  function getEl(id) { return document.getElementById(id); }
+
+  function setText(id, txt) {
+    var el = getEl(id);
+    if (el) el.textContent = txt;
+  }
+
+  function setHtml(id, html) {
+    var el = getEl(id);
+    if (el) el.innerHTML = html;
+  }
+
+  function updateBadge(n) {
+    var kitEl = getEl('kit' + n);
+    if (!kitEl) return;
+    var kit = kitEl.value;
+    if (!kit) { setText('badge' + n, '— kWc'); return; }
+    var kwc = kit.replace('b', '');
+    var bat = (kit.slice(-1) === 'b') ? ' +🔋' : '';
+    setText('badge' + n, kwc + ' kWc' + bat);
+  }
+
+  function calcOffre(n) {
+    var prix     = getVal('prix'     + n);
+    var subv     = getVal('subv'     + n);
+    var remise   = getVal('remise'   + n);
+    var primeEDF = getVal('primeedf' + n);
+    var surplus  = getVal('surplus'  + n);
+    var mens     = getVal('mens'     + n);
+    var edfMens  = getVal('edf'      + n);
+    var mensAn   = mens * 12;
+    var ecoAn    = edfMens * 12;
+
+    var capital  = Math.max(0, prix - subv - remise);
+    var apresEDF = Math.max(0, capital - primeEDF);
+
+    // Case "Après prime EDF" visible seulement si prime > 0
+    var apresCell = getEl('r' + n + '-apres-cell');
+    if (apresCell) {
+      apresCell.style.display = primeEDF > 0 ? 'block' : 'none';
+    }
+
+    setText('r' + n + '-capital', fmt(capital));
+    setText('r' + n + '-apres',   fmt(apresEDF));
+    setText('r' + n + '-mens',    fmtN(mens));
+
+    // Tableau amortissement
+    var solde  = capital;
+    var rows   = '';
+    var rembAn = null;
+    var an     = 1;
+
+    while (solde > 0 && an <= 30) {
+      var primeCol = an === 1 ? fmt(primeEDF) : '\u2014';
+      solde -= mensAn;
+      if (an === 1) {
+        solde -= primeEDF;
+        solde -= surplus;
+      } else {
+        solde -= surplus;
+      }
+      var done = solde <= 0;
+      if (done && rembAn === null) rembAn = an;
+      var capitalCol = done
+        ? '<span class="tag-rembourse">Remboursé !</span>'
+        : '<strong>' + fmt(Math.max(0, solde)) + '</strong>';
+      rows += '<tr' + (done ? ' class="done"' : '') + '>'
+        + '<td>Année ' + an + '</td>'
+        + '<td>' + fmt(mensAn) + '</td>'
+        + '<td>' + primeCol + '</td>'
+        + '<td>' + fmt(surplus) + '</td>'
+        + '<td>' + capitalCol + '</td>'
+        + '</tr>';
+      if (done) break;
+      an++;
+    }
+    setHtml('tbody' + n, rows);
+
+    // Conclusion
+    if (capital === 0 && mens === 0) { setHtml('conclu' + n, ''); return; }
+
+    var txt = rembAn !== null
+      ? 'Remboursée en ' + rembAn + ' an' + (rembAn > 1 ? 's' : '')
+      : 'Non remboursée sur la durée simulée';
+
+    // Revente 20 ans
+    var totalReventeSans = surplus * 20;
+    var totalRevente5    = 0;
+    for (var y = 0; y < 20; y++) { totalRevente5 += surplus * Math.pow(1.05, y); }
+
+    // Économies 20 ans (basées sur facture EDF actuelle)
+    var totalEcoSans = ecoAn * 20;
+    var totalEco5    = 0;
+    for (var y2 = 0; y2 < 20; y2++) { totalEco5 += ecoAn * Math.pow(1.05, y2); }
+
+    setHtml('conclu' + n,
+      '<div class="conclusion">' +
+        '<div class="conclusion-title">' + txt + '</div>' +
+        '<div class="conclusion-sub">Revente EDF : ' + fmtN(surplus) + ' €/an · Mensualité : ' + fmtN(mens) + ' €/mois</div>' +
+
+        '<div class="sep-label">💡 Revente EDF sur 20 ans</div>' +
+        '<div class="totaux-grid-1col">' +
+          '<div class="totaux-cell green">' +
+            '<div class="totaux-cell-label">Total revente EDF sur 20 ans</div>' +
+            '<div class="totaux-cell-val">' + fmt(totalReventeSans) + '</div>' +
+          '</div>' +
+        '</div>' +
+
+        '<div class="sep-label">💡 Total économisé sur 20 ans</div>' +
+        '<div class="totaux-grid">' +
+          '<div class="totaux-cell green">' +
+            '<div class="totaux-cell-label">Sans augmentation EDF</div>' +
+            '<div class="totaux-cell-val">' + fmt(totalEcoSans) + '</div>' +
+          '</div>' +
+          '<div class="totaux-cell orange">' +
+            '<div class="totaux-cell-label">Avec +5%/an EDF</div>' +
+            '<div class="totaux-cell-val">' + fmt(totalEco5) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+
+  function calcAll() { calcOffre(1); calcOffre(2); }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Logo fallback
+    var logoImg = getEl('logo-img');
+    if (logoImg) {
+      logoImg.onerror = function () {
+        logoImg.style.display = 'none';
+        var fb = getEl('logo-fallback');
+        if (fb) fb.style.display = 'block';
+      };
+    }
+
+    // Date du jour
+    var dateEl = getEl('client-date');
+    if (dateEl) dateEl.value = new Date().toLocaleDateString('fr-FR');
+
+    // Événements
+    var fieldIds = ['kit', 'prix', 'subv', 'remise', 'primeedf', 'surplus', 'mens', 'edf', 'duree'];
+    [1, 2].forEach(function (n) {
+      fieldIds.forEach(function (base) {
+        var el = getEl(base + n);
+        if (!el) return;
+        el.addEventListener('input',  function () { updateBadge(n); calcOffre(n); });
+        el.addEventListener('change', function () { updateBadge(n); calcOffre(n); });
+      });
+    });
+
+    var printBtn = getEl('btn-print');
+    if (printBtn) {
+      printBtn.addEventListener('click', function () {
+        var btn = getEl('btn-print');
+        btn.textContent = '⏳ Génération en cours...';
+        btn.disabled = true;
+
+        var page = document.querySelector('.page');
+        html2canvas(page, { scale: 2, useCORS: false, allowTaint: true, backgroundColor: '#ffffff' }).then(function (canvas) {
+          var imgData = canvas.toDataURL('image/png');
+          var pdf = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+          var pageW = pdf.internal.pageSize.getWidth();
+          var pageH = pdf.internal.pageSize.getHeight();
+          var ratio = canvas.width / canvas.height;
+          var imgW  = pageW;
+          var imgH  = pageW / ratio;
+          var y = 0;
+
+          while (y < imgH) {
+            if (y > 0) pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, -y, imgW, imgH);
+            y += pageH;
+          }
+
+          var nom = (getEl('client-nom').value || 'client').replace(/\s+/g, '_');
+          pdf.save('plan_financement_' + nom + '.pdf');
+          btn.textContent = '📄 Enregistrer en PDF';
+          btn.disabled = false;
+        }).catch(function () {
+          btn.textContent = '📄 Enregistrer en PDF';
+          btn.disabled = false;
+          alert('Erreur lors de la génération du PDF. Essayez via Ctrl+P.');
+        });
+      });
+    }
+  });
+}());
+</script>
+</body>
+</html>
